@@ -5,6 +5,8 @@ from pickle import GET
 from flask import Flask, redirect, render_template, request , url_for , Request
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
 db = SQLAlchemy(app)
@@ -30,9 +32,9 @@ def index():
             db.session.add(new_task)
             db.session.commit()
             return redirect('/')
-        
         except:
             return 'There was an issue adding your task'
+
     else:
         tasks= Todo.query.order_by(Todo.date_created).all ()
         return render_template('index.html', tasks=tasks)
@@ -52,6 +54,7 @@ def delete(id):
 def update(id):
 
     task = Todo.query.get_or_404(id)
+    
     if request.method == 'POST':
         task.content = request.form['content']
 
@@ -60,6 +63,7 @@ def update(id):
             return redirect('/')
         except:
             return 'there was an issue updating this task'
+
     else:
         return render_template('update.html', task = task)
 
